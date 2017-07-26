@@ -11,7 +11,8 @@ namespace Lab1
     [Activity(Label = "Lab1", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
-        int count = 1;
+        Button btnRegistro;
+        TextView textViewDev;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -22,9 +23,19 @@ namespace Lab1
 
             // Get our button from the layout resource,
             // and attach an event to it
-            Button button = FindViewById<Button>(Resource.Id.MyButton);
+            btnRegistro = FindViewById<Button>(Resource.Id.MyButton);
+            textViewDev = FindViewById<TextView>(Resource.Id.textViewDev);
 
-            button.Click += delegate { button.Text = string.Format("{0} clicks!", count++); };
+            btnRegistro.Click += Button_Click;
+        }
+
+        private async void Button_Click(object sender, EventArgs e)
+        {
+            textViewDev.Text = "Juan Alejandro Rosales Coronel";
+            string myDevice = Android.Provider.Settings.Secure.GetString(ContentResolver, Android.Provider.Settings.Secure.AndroidId);
+            XamarinDiplomado.ServiceHelper helper = new XamarinDiplomado.ServiceHelper();
+            await helper.InsertarEntidad("jarc_software@hotmail.com", "lab1", myDevice);
+            btnRegistro.Text = "Gracias por completar el Lab1";
         }
     }
 }
